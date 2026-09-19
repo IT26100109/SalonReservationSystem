@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: BeautySalonReservation
+  datasource:
+    url: jdbc:mysql://localhost:3306/SalonReservation?createDatabaseIfNotExist=true
+    username: root
+    password: Vimi#2006
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
