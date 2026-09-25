@@ -1,0 +1,27 @@
+package com.WD09Final.BeautySalonReservation.services;
+
+
+
+import com.WD09Final.BeautySalonReservation.entities.Customer;
+import com.WD09Final.BeautySalonReservation.entities.User;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+public interface UserService {
+    Customer registerCustomer(Customer customer);
+    User findByEmail(String email);
+    User updateUserProfile(Long userId, String fullName, String phone);
+    void updateUserProfile(Long id, String fullName, String email, String phone); // overload, keep the old one too
+    void changePassword(Long id, String currentPassword, String newPassword);
+
+    @Transactional(readOnly = true)
+    User findById(Long userId);
+
+    List<Customer> getAllCustomers();
+    void deleteUser(Long userId);
+
+    void updateCustomerTier(Long customerId, String newTier);
+
+    void applyAppointmentRewards(Long customerId, Double price);
+}
