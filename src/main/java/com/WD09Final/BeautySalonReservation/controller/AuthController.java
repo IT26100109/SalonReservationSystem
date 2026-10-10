@@ -2,7 +2,7 @@ package com.WD09Final.BeautySalonReservation.controller;
 
 
 import com.WD09Final.BeautySalonReservation.entities.Customer;
-import com.WD09Final.BeautySalonReservation.services.UserService;
+import com.WD09Final.BeautySalonReservation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

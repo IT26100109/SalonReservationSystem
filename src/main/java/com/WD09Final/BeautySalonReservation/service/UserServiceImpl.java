@@ -1,5 +1,4 @@
-package com.WD09Final.BeautySalonReservation.services;
-
+package com.WD09Final.BeautySalonReservation.service;
 
 import com.WD09Final.BeautySalonReservation.entities.Customer;
 import com.WD09Final.BeautySalonReservation.entities.User;
