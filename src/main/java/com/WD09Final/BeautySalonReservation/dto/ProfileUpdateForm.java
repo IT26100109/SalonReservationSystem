@@ -5,11 +5,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-/**
- * Backing object for the "Personal information" form on /customer/profile.
- * If you're on Spring Boot 2 / javax, swap the jakarta.validation imports
- * above for javax.validation.constraints instead.
- */
+
+//Backing object for the "Personal information" form on /customer/profile.
+
 public class ProfileUpdateForm {
 
     @NotBlank(message = "Full name is required")
