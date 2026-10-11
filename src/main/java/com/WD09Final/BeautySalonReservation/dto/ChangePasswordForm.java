@@ -4,9 +4,9 @@ package com.WD09Final.BeautySalonReservation.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-/**
- * Backing object for the "Change password" form on /customer/profile.
- */
+
+ //Backing object for the "Change password" form on /customer/profile.
+
 public class ChangePasswordForm {
 
     @NotBlank(message = "Enter your current password")
