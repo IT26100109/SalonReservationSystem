@@ -1,7 +1,8 @@
 package com.WD09Final.BeautySalonReservation.service;
 
-import com.WD09.BeautySaloonSystem.dto.AppointmentForm;
-import com.WD09.BeautySaloonSystem.entities.Appointment;
+
+import com.WD09Final.BeautySalonReservation.dto.AppointmentForm;
+import com.WD09Final.BeautySalonReservation.entities.Appointment;
 
 import java.util.List;
 

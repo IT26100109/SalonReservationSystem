@@ -1,19 +1,17 @@
 package com.WD09Final.BeautySalonReservation.contoller;
 
-import com.WD09.BeautySaloonSystem.dto.AppointmentForm;
-import com.WD09.BeautySaloonSystem.entities.Appointment;
-import com.WD09.BeautySaloonSystem.service.AppointmentService;
-import com.WD09.BeautySaloonSystem.service.ServiceCatalogService;
-import com.WD09.BeautySaloonSystem.service.UserService;
+
+import com.WD09Final.BeautySalonReservation.dto.AppointmentForm;
+import com.WD09Final.BeautySalonReservation.entities.Appointment;
+import com.WD09Final.BeautySalonReservation.service.AppointmentService;
+import com.WD09Final.BeautySalonReservation.service.ServiceCatalogService;
+import com.WD09Final.BeautySalonReservation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -80,8 +78,13 @@ public class AppointmentController {
         try {
             Appointment appointment = appointmentService.getAppointmentById(id);
 
-            // Prevent double reward processing if appointment is already ACCEPTED
-            if ("ACCEPTED".equalsIgnoreCase(appointment.getStatus()) && "ACCEPTED".equalsIgnoreCase(status)) {
+            String current = appointment.getStatus() == null
+                    ? "" : appointment.getStatus().trim().toUpperCase();
+            boolean alreadyAccepted = "ACCEPTED".equals(current) || "CONFIRMED".equals(current);
+            boolean requestingAccept = "ACCEPTED".equalsIgnoreCase(status) || "CONFIRMED".equalsIgnoreCase(status);
+
+            // Prevent double reward processing if appointment is already accepted
+            if (alreadyAccepted && requestingAccept) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Appointment #" + id + " is already accepted.");
                 return "redirect:/admin/appointments";
             }
@@ -89,8 +92,9 @@ public class AppointmentController {
             // 1. Update appointment status in database
             appointmentService.updateAppointmentStatus(id, status);
 
-            // 2. Automatically trigger customer rewards (total spent, loyalty points, tier) if status is ACCEPTED
-            if ("ACCEPTED".equalsIgnoreCase(status) && appointment.getCustomer() != null) {
+            // 2. Trigger customer rewards (total spent, loyalty points, tier) when accepted.
+            //    Uses the stored price, which already includes any VIP surcharge.
+            if (requestingAccept && appointment.getCustomer() != null && appointment.getPrice() != null) {
                 userService.applyAppointmentRewards(appointment.getCustomer().getId(), appointment.getPrice());
                 redirectAttributes.addFlashAttribute("successMessage",
                         "Appointment #" + id + " accepted! Customer metrics and tier updated.");

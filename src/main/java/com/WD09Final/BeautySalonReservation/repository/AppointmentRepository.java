@@ -1,7 +1,8 @@
 package com.WD09Final.BeautySalonReservation.repository;
 
-import com.WD09.BeautySaloonSystem.entities.Appointment;
-import com.WD09.BeautySaloonSystem.entities.Customer;
+
+import com.WD09Final.BeautySalonReservation.entities.Appointment;
+import com.WD09Final.BeautySalonReservation.entities.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,9 +1,13 @@
 package com.WD09Final.BeautySalonReservation.service;
 
-import com.WD09.BeautySaloonSystem.dto.AppointmentForm;
-import com.WD09.BeautySaloonSystem.entities.*;
-import com.WD09.BeautySaloonSystem.repository.AppointmentRepository;
-import com.WD09.BeautySaloonSystem.repository.CustomerRepository;
+
+import com.WD09Final.BeautySalonReservation.dto.AppointmentForm;
+import com.WD09Final.BeautySalonReservation.entities.Appointment;
+import com.WD09Final.BeautySalonReservation.entities.AppointmentStatus;
+import com.WD09Final.BeautySalonReservation.entities.Customer;
+import com.WD09Final.BeautySalonReservation.entities.VIPAppointment;
+import com.WD09Final.BeautySalonReservation.repository.AppointmentRepository;
+import com.WD09Final.BeautySalonReservation.repository.CustomerRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +16,8 @@ import java.util.List;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
+
+    private static final double VIP_SURCHARGE = 1.15;
 
     @Autowired
     private AppointmentRepository appointmentRepository;
@@ -26,6 +32,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .orElseThrow(() -> new RuntimeException("Customer not found with email: " + customerEmail));
 
         Appointment appointment;
+
         if ("VIP".equalsIgnoreCase(form.getAppointmentType())) {
             VIPAppointment vip = new VIPAppointment();
             vip.setDedicatedStylist(form.getDedicatedStylist());
@@ -37,7 +44,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setCustomer(customer);
         appointment.setServiceName(form.getServiceName());
         appointment.setAppointmentDateTime(form.getAppointmentDateTime());
+
         appointment.setPrice(form.getPrice());
+        double finalPrice = appointment.calculateFinalPrice();
+        appointment.setPrice(Math.round(finalPrice * 100.0) / 100.0);
+
         appointment.setNotes(form.getNotes());
         appointment.setStatus(AppointmentStatus.PENDING);
 
@@ -66,8 +77,31 @@ public class AppointmentServiceImpl implements AppointmentService {
             throw new IllegalArgumentException("Status cannot be empty");
         }
 
-        // Set the status directly as a String
-        appointment.setStatus(status.toUpperCase());
+        // GUARD: if it's already confirmed or accepted, prevent changing it again
+        String currentStatus = appointment.getStatus() == null
+                ? "" : appointment.getStatus().trim().toUpperCase();
+        if (AppointmentStatus.CONFIRMED.equals(currentStatus) || "ACCEPTED".equals(currentStatus)) {
+            throw new IllegalStateException("This appointment has already been accepted and cannot be modified.");
+        }
+
+        // Normalize the requested status (trim + uppercase)
+        String normalizedStatus = status.trim().toUpperCase();
+
+        // ACCEPTED is treated as CONFIRMED
+        if ("ACCEPTED".equals(normalizedStatus)) {
+            normalizedStatus = AppointmentStatus.CONFIRMED;
+        }
+
+        switch (normalizedStatus) {
+            case AppointmentStatus.CONFIRMED:
+            case AppointmentStatus.CANCELLED:
+            case AppointmentStatus.COMPLETED:
+            case AppointmentStatus.PENDING:
+                appointment.setStatus(normalizedStatus);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid appointment status: " + status);
+        }
 
         return appointmentRepository.save(appointment);
     }
