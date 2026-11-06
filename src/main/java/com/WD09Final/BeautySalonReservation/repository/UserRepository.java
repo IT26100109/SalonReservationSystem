@@ -1,4 +1,5 @@
 package com.WD09Final.BeautySalonReservation.repository;
+
 import com.WD09Final.BeautySalonReservation.entities.Customer;
 import com.WD09Final.BeautySalonReservation.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
