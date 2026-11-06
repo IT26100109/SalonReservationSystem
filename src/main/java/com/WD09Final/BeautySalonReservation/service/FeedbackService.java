@@ -1,7 +1,8 @@
 package com.WD09Final.BeautySalonReservation.service;
 
 
-import com.WD09.BeautySaloonSystem.dto.FeedbackDto;
+import com.WD09Final.BeautySalonReservation.dto.FeedbackDto;
+
 import java.util.List;
 
 public interface FeedbackService {
