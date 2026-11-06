@@ -1,0 +1,112 @@
+package com.WD09Final.BeautySalonReservation.contoller;
+
+
+import com.WD09Final.BeautySalonReservation.dto.AppointmentForm;
+import com.WD09Final.BeautySalonReservation.entities.Appointment;
+import com.WD09Final.BeautySalonReservation.service.AppointmentService;
+import com.WD09Final.BeautySalonReservation.service.ServiceCatalogService;
+import com.WD09Final.BeautySalonReservation.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+@Controller
+public class AppointmentController {
+
+    private final AppointmentService appointmentService;
+    private final UserService userService;
+    private final ServiceCatalogService serviceCatalogService;
+
+    @Autowired
+    public AppointmentController(AppointmentService appointmentService,
+                                 UserService userService,
+                                 ServiceCatalogService serviceCatalogService) {
+        this.appointmentService = appointmentService;
+        this.userService = userService;
+        this.serviceCatalogService = serviceCatalogService;
+    }
+
+    // Customer Views Personal Bookings: GET /customer/appointments
+    @GetMapping("/customer/appointments")
+    public String viewMyAppointments(Authentication authentication, Model model) {
+        String userEmail = authentication.getName();
+        model.addAttribute("appointments", appointmentService.getAppointmentsForCustomer(userEmail));
+        return "customer/my-appointments";
+    }
+
+    // Customer Booking Form: GET /customer/appointments/book
+    @GetMapping("/customer/appointments/book")
+    public String showBookingForm(Model model) {
+        model.addAttribute("appointmentForm", new AppointmentForm());
+        // Fills the treatment dropdown from the admin Service Catalog
+        model.addAttribute("services", serviceCatalogService.getAllServices());
+        return "customer/book-appointment";
+    }
+
+    // Customer Submit Booking: POST /customer/appointments/book
+    @PostMapping("/customer/appointments/book")
+    public String processBooking(@ModelAttribute("appointmentForm") AppointmentForm form,
+                                 Authentication authentication,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            appointmentService.createAppointment(authentication.getName(), form);
+            return "redirect:/customer/appointments?success";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/customer/appointments/book";
+        }
+    }
+
+    // Admin Views All Bookings: GET /admin/appointments
+    @GetMapping("/admin/appointments")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String viewAllAppointments(Model model) {
+        model.addAttribute("appointments", appointmentService.getAllAppointments());
+        return "admin/all-appointments";
+    }
+
+    // Admin Updates Status: POST /admin/appointments/update-status
+    @PostMapping("/admin/appointments/update-status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String updateStatus(@RequestParam("id") Long id,
+                               @RequestParam("status") String status,
+                               RedirectAttributes redirectAttributes) {
+        try {
+            Appointment appointment = appointmentService.getAppointmentById(id);
+
+            String current = appointment.getStatus() == null
+                    ? "" : appointment.getStatus().trim().toUpperCase();
+            boolean alreadyAccepted = "ACCEPTED".equals(current) || "CONFIRMED".equals(current);
+            boolean requestingAccept = "ACCEPTED".equalsIgnoreCase(status) || "CONFIRMED".equalsIgnoreCase(status);
+
+            // Prevent double reward processing if appointment is already accepted
+            if (alreadyAccepted && requestingAccept) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Appointment #" + id + " is already accepted.");
+                return "redirect:/admin/appointments";
+            }
+
+            // 1. Update appointment status in database
+            appointmentService.updateAppointmentStatus(id, status);
+
+            // 2. Trigger customer rewards (total spent, loyalty points, tier) when accepted.
+            //    Uses the stored price, which already includes any VIP surcharge.
+            if (requestingAccept && appointment.getCustomer() != null && appointment.getPrice() != null) {
+                userService.applyAppointmentRewards(appointment.getCustomer().getId(), appointment.getPrice());
+                redirectAttributes.addFlashAttribute("successMessage",
+                        "Appointment #" + id + " accepted! Customer metrics and tier updated.");
+            } else {
+                redirectAttributes.addFlashAttribute("successMessage",
+                        "Appointment #" + id + " status updated to " + status);
+            }
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/admin/appointments";
+    }
+}
