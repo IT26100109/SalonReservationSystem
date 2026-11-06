@@ -1,7 +1,9 @@
 package com.WD09Final.BeautySalonReservation.service;
 
-import com.WD09.BeautySaloonSystem.dto.ProductForm;
-import com.WD09.BeautySaloonSystem.entities.Product;
+
+import com.WD09Final.BeautySalonReservation.dto.ProductForm;
+import com.WD09Final.BeautySalonReservation.entities.Product;
+
 import java.util.List;
 
 public interface ProductService {
