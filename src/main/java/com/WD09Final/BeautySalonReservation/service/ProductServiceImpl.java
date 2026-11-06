@@ -1,12 +1,12 @@
 package com.WD09Final.BeautySalonReservation.service;
 
-import com.WD09.BeautySaloonSystem.dto.ProductForm;
-import com.WD09.BeautySaloonSystem.entities.HairProduct;
-import com.WD09.BeautySaloonSystem.entities.NailProduct;
-import com.WD09.BeautySaloonSystem.entities.Product;
-import com.WD09.BeautySaloonSystem.entities.SkinProduct;
-import com.WD09.BeautySaloonSystem.repository.ProductRepository;
-import com.WD09.BeautySaloonSystem.service.ProductService;
+import com.WD09Final.BeautySalonReservation.dto.ProductForm;
+import com.WD09Final.BeautySalonReservation.entities.HairProduct;
+import com.WD09Final.BeautySalonReservation.entities.NailProduct;
+import com.WD09Final.BeautySalonReservation.entities.Product;
+import com.WD09Final.BeautySalonReservation.entities.SkinProduct;
+import com.WD09Final.BeautySalonReservation.repository.ProductRepository;
+import com.WD09Final.BeautySalonReservation.service.ProductService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
