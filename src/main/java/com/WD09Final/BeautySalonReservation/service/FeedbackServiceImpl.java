@@ -1,11 +1,10 @@
 package com.WD09Final.BeautySalonReservation.service;
 
-import com.WD09.BeautySaloonSystem.dto.FeedbackDto;
-import com.WD09.BeautySaloonSystem.entities.Feedback;
-import com.WD09.BeautySaloonSystem.entities.User;
-import com.WD09.BeautySaloonSystem.repository.FeedbackRepository;
-import com.WD09.BeautySaloonSystem.repository.UserRepository;
-import com.WD09.BeautySaloonSystem.service.FeedbackService;
+import com.WD09Final.BeautySalonReservation.dto.FeedbackDto;
+import com.WD09Final.BeautySalonReservation.entities.Feedback;
+import com.WD09Final.BeautySalonReservation.entities.User;
+import com.WD09Final.BeautySalonReservation.repository.FeedbackRepository;
+import com.WD09Final.BeautySalonReservation.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
