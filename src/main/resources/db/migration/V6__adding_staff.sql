@@ -1,4 +1,4 @@
-CREATE TABLE `saloonmanagement`.`staff` (
+CREATE TABLE `salonreservation`.`staff` (
                                             `id` BIGINT NOT NULL AUTO_INCREMENT,
                                             `full_name` VARCHAR(255) NULL,
                                             `email` VARCHAR(255) NOT NULL,

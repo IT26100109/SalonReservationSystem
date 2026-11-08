@@ -12,6 +12,6 @@ CREATE TABLE `salonreservation`.`appointments` (
                                                    INDEX `fk_appointment_customer_idx` (`customer_id` ASC) VISIBLE,
                                                    CONSTRAINT `fk_appointment_customer`
                                                        FOREIGN KEY (`customer_id`)
-                                                           REFERENCES `saloonmanagement`.`users` (`id`)
+                                                           REFERENCES `salonreservation`.`users` (`id`)
                                                            ON DELETE CASCADE
                                                            ON UPDATE NO ACTION);
