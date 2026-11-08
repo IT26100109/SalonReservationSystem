@@ -11,7 +11,7 @@ public interface UserService {
     Customer registerCustomer(Customer customer);
     User findByEmail(String email);
     User updateUserProfile(Long userId, String fullName, String phone);
-    void updateUserProfile(Long id, String fullName, String email, String phone); // overload, keep the old one too
+    void updateUserProfile(Long id, String fullName, String email, String phone);
     void changePassword(Long id, String currentPassword, String newPassword);
 
     @Transactional(readOnly = true)

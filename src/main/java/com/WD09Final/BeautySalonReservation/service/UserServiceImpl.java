@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    //Registering Customer
     @Override
     public Customer registerCustomer(Customer customer) {
         if (userRepository.existsByEmail(customer.getEmail())) {
@@ -122,21 +123,19 @@ public class UserServiceImpl implements UserService {
 
         if (user instanceof Customer customer) {
             // 1. Increment Total Spent
-            // 1. Increment Total Spent
-// 1. Increment Total Spent
             double currentSpent = customer.getTotalSpent(); // Primitive double cannot be null
             double newTotalSpent = currentSpent + price;
             customer.setTotalSpent(newTotalSpent);
 
-// 2. Add Loyalty Points (1 point earned per $10 spent)
+            // 2. Add Loyalty Points (1 point earned per $10 spent)
             int pointsEarned = (int) (price / 10);
             int currentPoints = customer.getLoyaltyPoints(); // Primitive int cannot be null
             customer.setLoyaltyPoints(currentPoints + pointsEarned);
 
-// 3. Automatically upgrade Tier based on cumulative spent amount
-            if (newTotalSpent >= 500.0) {
+            // 3. Automatically upgrade Tier based on cumulative spent amount
+            if (newTotalSpent >= 200000.0) {
                 customer.setMembershipTier("PLATINUM");
-            } else if (newTotalSpent >= 200.0) {
+            } else if (newTotalSpent >= 50000.0) {
                 customer.setMembershipTier("GOLD");
             } else {
                 customer.setMembershipTier("SILVER");
