@@ -5,8 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 
- //Backing object for the "Change password" form on /customer/profile.
-
+// DTO in /customer/profile to carry data
 public class ChangePasswordForm {
 
     @NotBlank(message = "Enter your current password")
@@ -19,9 +18,11 @@ public class ChangePasswordForm {
     @NotBlank(message = "Confirm your new password")
     private String confirmPassword;
 
+    //Default Constructor
     public ChangePasswordForm() {
     }
 
+    // Getters and Setters
     public String getCurrentPassword() {
         return currentPassword;
     }

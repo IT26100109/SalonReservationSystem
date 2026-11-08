@@ -5,9 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-
-//Backing object for the "Personal information" form on /customer/profile.
-
+// DTO in /customer/profile to carry data
 public class ProfileUpdateForm {
 
     @NotBlank(message = "Full name is required")
@@ -21,16 +19,18 @@ public class ProfileUpdateForm {
     @Size(max = 30, message = "Phone number is too long")
     private String phone;
 
-
+    // Default Constructor
     public ProfileUpdateForm() {
     }
 
+    //Parametrized Constructor
     public ProfileUpdateForm(String fullName, String email, String phone) {
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
     }
 
+    //Getters and Setters
     public String getFullName() {
         return fullName;
     }
