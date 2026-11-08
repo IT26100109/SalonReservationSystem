@@ -1,6 +1,7 @@
 package com.WD09Final.BeautySalonReservation.repository;
 
-import com.WD09.BeautySaloonSystem.entities.Feedback;
+
+import com.WD09Final.BeautySalonReservation.entities.Feedback;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
