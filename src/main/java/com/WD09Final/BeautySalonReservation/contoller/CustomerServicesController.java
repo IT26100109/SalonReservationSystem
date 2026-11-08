@@ -1,9 +1,9 @@
 package com.WD09Final.BeautySalonReservation.contoller;
 
-import com.WD09.BeautySaloonSystem.entities.Customer;
-import com.WD09.BeautySaloonSystem.entities.ServiceEntity;
-import com.WD09.BeautySaloonSystem.service.CustomerProfileService;
-import com.WD09.BeautySaloonSystem.service.ServiceCatalogService;
+import com.WD09Final.BeautySalonReservation.entities.Customer;
+import com.WD09Final.BeautySalonReservation.entities.ServiceEntity;
+import com.WD09Final.BeautySalonReservation.service.CustomerProfileService;
+import com.WD09Final.BeautySalonReservation.service.ServiceCatalogService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
