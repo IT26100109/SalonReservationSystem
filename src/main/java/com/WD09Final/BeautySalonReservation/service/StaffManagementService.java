@@ -34,7 +34,7 @@ public class StaffManagementService {
         StaffEntity existing = getStaffById(id);
         existing.setFullName(updatedStaff.getFullName());
         existing.setEmail(updatedStaff.getEmail());
-        existing.setPhone(updatedStaff.getPhone());
+        existing.setPhone(updatedStaff. getPhone());
         existing.setRole(updatedStaff.getRole());
         existing.setStatus(updatedStaff.getStatus());
         staffRepository.save(existing);
