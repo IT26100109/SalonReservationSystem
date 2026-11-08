@@ -1,8 +1,9 @@
 package com.WD09Final.BeautySalonReservation.service;
 
 
-import com.WD09.BeautySaloonSystem.entities.ServiceEntity;
-import com.WD09.BeautySaloonSystem.repository.ServiceRepository;
+
+import com.WD09Final.BeautySalonReservation.entities.ServiceEntity;
+import com.WD09Final.BeautySalonReservation.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
