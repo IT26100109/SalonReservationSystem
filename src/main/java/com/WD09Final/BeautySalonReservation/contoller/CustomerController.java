@@ -1,4 +1,4 @@
-package com.WD09Final.BeautySalonReservation.controller;
+package com.WD09Final.BeautySalonReservation.contoller;
 
 
 import com.WD09Final.BeautySalonReservation.dto.ChangePasswordForm;
@@ -28,6 +28,7 @@ public class CustomerController {
         this.userService = userService;
     }
 
+    // Display Customer Dashboard For specific customer
     @GetMapping("/dashboard")
     public String customerDashboard(Authentication auth, Model model) {
         Customer customer = (Customer) userService.findByEmail(auth.getName());
@@ -35,6 +36,7 @@ public class CustomerController {
         return "customer/dashboard";
     }
 
+    // Display Customer Dashboard For specific customer
     @GetMapping("/profile")
     public String viewProfile(Authentication auth, Model model) {
         Customer customer = (Customer) userService.findByEmail(auth.getName());
@@ -42,8 +44,7 @@ public class CustomerController {
         model.addAttribute("customer", customer);
         model.addAttribute("activePage", "profile");
 
-        // Only seed fresh forms if a failed submission didn't already put one
-        // in the model via redirect flash attributes (see updateProfile below).
+        //If there is a form data it doesn't create a new form otherwise it will
         if (!model.containsAttribute("profileForm")) {
             model.addAttribute("profileForm",
                     new ProfileUpdateForm(customer.getFullName(), customer.getEmail(), customer.getPhone()));
@@ -55,6 +56,7 @@ public class CustomerController {
         return "customer/profile";
     }
 
+    // Process Profile update submissions
     @PostMapping("/profile/update")
     public String updateProfile(Authentication auth,
                                 @Valid @ModelAttribute("profileForm") ProfileUpdateForm form,
@@ -71,9 +73,6 @@ public class CustomerController {
         Customer customer = (Customer) userService.findByEmail(auth.getName());
 
         try {
-            // NOTE: this calls a 4-arg overload (id, fullName, email, phone).
-            // Your UserService currently only has the 3-arg (id, fullName, phone)
-            // version — add the overload shown in the chat message below.
             userService.updateUserProfile(customer.getId(), form.getFullName(), form.getEmail(), form.getPhone());
             redirectAttributes.addFlashAttribute("profileSuccess", "Your details have been updated.");
         } catch (RuntimeException ex) {
@@ -84,6 +83,7 @@ public class CustomerController {
         return "redirect:/customer/profile";
     }
 
+    // Process Password change submissions
     @PostMapping("/profile/password")
     public String changePassword(Authentication auth,
                                  @Valid @ModelAttribute("passwordForm") ChangePasswordForm form,
@@ -104,8 +104,6 @@ public class CustomerController {
         Customer customer = (Customer) userService.findByEmail(auth.getName());
 
         try {
-            // NOTE: this method doesn't exist on your UserService yet —
-            // add it as shown in the chat message below.
             userService.changePassword(customer.getId(), form.getCurrentPassword(), form.getNewPassword());
             redirectAttributes.addFlashAttribute("passwordSuccess", "Your password has been updated.");
         } catch (RuntimeException ex) {

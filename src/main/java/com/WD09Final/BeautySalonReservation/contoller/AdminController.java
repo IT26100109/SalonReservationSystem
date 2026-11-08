@@ -1,10 +1,10 @@
 package com.WD09Final.BeautySalonReservation.contoller;
 
-import com.WD09.BeautySaloonSystem.entities.AdminUser;
-import com.WD09.BeautySaloonSystem.entities.Appointment;
-import com.WD09.BeautySaloonSystem.entities.Customer;
-import com.WD09.BeautySaloonSystem.service.AppointmentService;
-import com.WD09.BeautySaloonSystem.service.UserService;
+import com.WD09Final.BeautySalonReservation.entities.AdminUser;
+import com.WD09Final.BeautySalonReservation.entities.Appointment;
+import com.WD09Final.BeautySalonReservation.entities.Customer;
+import com.WD09Final.BeautySalonReservation.service.AppointmentService;
+import com.WD09Final.BeautySalonReservation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -28,7 +28,7 @@ public class AdminController {
         this.appointmentService = appointmentService;
     }
 
-    // Single Dynamic View Dashboard Endpoint
+    // Admin dashboard view
     @GetMapping("/dashboard")
     public String adminDashboard(@RequestParam(name = "view", required = false) String view,
                                  Authentication auth,
@@ -53,7 +53,7 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-    // Manual Admin Override: Update Customer Membership Tier
+    // Override Update Customer Membership Tier
     @PostMapping("/customers/update-tier")
     public String updateCustomerTier(@RequestParam Long customerId,
                                      @RequestParam String newTier,
@@ -67,7 +67,7 @@ public class AdminController {
         return "redirect:/admin/dashboard?view=customers";
     }
 
-    // Remove / Deactivate Customer Account
+    // Remove Customer Account
     @PostMapping("/customers/delete/{id}")
     public String deleteCustomer(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
@@ -79,11 +79,11 @@ public class AdminController {
         return "redirect:/admin/dashboard?view=customers";
     }
 
-    // Accept Appointment Endpoint
+    // Accept Appointment
     @PostMapping("/appointments/accept/{id}")
     public String acceptAppointment(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
-            // 1. Fetch appointment details
+            // Fetch appointment details
             Appointment appointment = appointmentService.getAppointmentById(id);
 
             // Prevent double processing if already accepted
@@ -92,10 +92,10 @@ public class AdminController {
                 return "redirect:/admin/dashboard?view=appointments";
             }
 
-            // 2. Update status to ACCEPTED
+            //Update status to ACCEPTED
             appointmentService.updateAppointmentStatus(id, "ACCEPTED");
 
-            // 3. Update Customer's Total Spent, Loyalty Points, and Tier
+            //Update Customer's Total Spent, Loyalty Points, and Tier
             if (appointment.getCustomer() != null && appointment.getPrice() != null) {
                 userService.applyAppointmentRewards(appointment.getCustomer().getId(), appointment.getPrice());
             }

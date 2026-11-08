@@ -1,4 +1,4 @@
-package com.WD09Final.BeautySalonReservation.controller;
+package com.WD09Final.BeautySalonReservation.contoller;
 
 
 import com.WD09Final.BeautySalonReservation.entities.Customer;
@@ -20,22 +20,26 @@ public class AuthController {
         this.userService = userService;
     }
 
+    // Root Url Mapping to /login
     @GetMapping("/")
     public String home() {
         return "redirect:/login";
     }
 
+    // Gives Login View
     @GetMapping("/login")
     public String showLoginForm() {
         return "login";
     }
 
+    // Gives Register View
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("customer", new Customer());
         return "register";
     }
 
+    //Handles Customer Registration If Succeeds redirect to /login
     @PostMapping("/register")
     public String registerCustomer(@ModelAttribute("customer") Customer customer, Model model) {
         try {
