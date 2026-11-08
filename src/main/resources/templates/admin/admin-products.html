@@ -310,7 +310,6 @@
                                 <th>Product</th>
                                 <th>Category</th>
                                 <th>Price</th>
-                                <th>Price incl. Tax</th>
                                 <th>Stock</th>
                                 <th class="actions-heading">Actions</th>
                             </tr>
@@ -333,7 +332,6 @@
                                 </td>
                                 <td><span class="points-badge" th:text="${p.categoryLabel}">Hair Care</span></td>
                                 <td><span class="money-value" th:text="${'LKR ' + #numbers.formatDecimal(p.price, 1, 'COMMA', 2, 'POINT')}">LKR 0.00</span></td>
-                                <td><span class="money-value" th:text="${'LKR ' + #numbers.formatDecimal(p.finalPrice, 1, 'COMMA', 2, 'POINT')}">LKR 0.00</span></td>
                                 <td>
                                     <span class="stock-pill"
                                           th:classappend="${p.quantity == 0} ? 'out' : (${p.quantity < 5} ? 'low' : '')">
@@ -365,7 +363,7 @@
                                 </td>
                             </tr>
                             <tr th:if="${products == null or #lists.isEmpty(products)}">
-                                <td colspan="7">
+                                <td colspan="6">
                                     <div class="empty-state">
                                         <div class="empty-icon"><i class="bi bi-box-seam"></i></div>
                                         <h4>No Products Found</h4>
